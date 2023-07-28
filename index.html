@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDLux | Mine Online</title>
+    <link rel="icon" href="https://github-production-user-asset-6210df.s3.amazonaws.com/140844216/256894455-e055683f-06ea-4279-bce0-a7c9d0badd16.png" type="image/png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif; /* Use the Roboto font */
+            font-size: 18px; /* Increase the default font size */
+        }
+        
+        .button-wrapper {
+            position: relative;
+            padding: 20px;
+        }
+
+        .button-outline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: 4px solid #f0f0f0; /* Color of the outline */
+            border-radius: 50%; /* To make it a circle */
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            pointer-events: none; /* Ignore pointer events for the outline div */
+        }
+
+        .round-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #3498db; /* Button background color */
+            border-radius: 50%; /* To make it a circle */
+            width: 100px;
+            height: 100px;
+            color: #ffffff; /* Button text color */
+            font-size: 18px; /* Increase the button font size */
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .round-button.mining {
+            background-color: #e74c3c; /* Red background color when mining */
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: 24px; /* Increase the heading font size */
+        }
+
+        .hashrate {
+            font-size: 16px; /* Increase the hashrate font size */
+        }
+
+        /* Define different colors for hashrate text based on ranges */
+        .red {
+            color: #e74c3c;
+        }
+
+        .green {
+            color: #27ae60;
+        }
+
+        .grey {
+            color: #888;
+        }
+    </style>
+
+    <!-- Favicon link -->
+    <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body>
+    <h3>Balance: $<span id="balance">0.00</span></h3>
+    <div class="button-wrapper">
+        <div class="button-outline"></div>
+        <button class="round-button" onclick="toggleMining()">Start Mining</button>
+    </div>
+    <p class="hashrate">Hashrate: <span id="hashrate">50</span> MH/s</p>
+
+    <script>
+        let balance = 0; // Represented as USD
+        let miningInterval;
+        let isMining = false; // Flag to track mining state
+
+        // Set the range for random miner amount
+        const minMinerAmount = 1.00;
+        const maxMinerAmount = 7.99;
+
+        function toggleMining() {
+            const button = document.querySelector(".round-button");
+            if (isMining) {
+                // If mining is in progress, stop mining
+                clearInterval(miningInterval);
+                isMining = false;
+                button.classList.remove("mining");
+                button.textContent = "Start Mining";
+            } else {
+                // If mining is not in progress, start mining
+                miningInterval = setInterval(mineBitcoin, 1000); // Mine every 1 second
+                isMining = true;
+                button.classList.add("mining");
+                button.textContent = "Stop";
+            }
+        }
+
+        function mineBitcoin() {
+            // Generate random miner amount between 0.01 and 1.00
+            const minerAmount = getRandomNumber(minMinerAmount, maxMinerAmount);
+
+            // Increment the balance by the random miner amount
+            balance += minerAmount;
+            updateBalanceText();
+
+            // Update hashrate with random values between 35 and 100
+            const hashrateElement = document.getElementById("hashrate");
+            const randomHashrate = Math.floor(Math.random() * (100 - 35 + 1)) + 35;
+            hashrateElement.textContent = randomHashrate;
+
+            // Apply different colors based on the hashrate range
+            if (randomHashrate < 42) {
+                hashrateElement.className = "red";
+            } else if (randomHashrate >= 80) {
+                hashrateElement.className = "green";
+            } else {
+                hashrateElement.className = "grey";
+            }
+        }
+
+        function updateBalanceText() {
+            const balanceElement = document.getElementById("balance");
+            balanceElement.textContent = balance.toFixed(2); // Format balance with 2 decimal places
+        }
+
+        // Utility function to get a random number within a specified range
+        function getRandomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+    </script>
+</body>
+</html>
