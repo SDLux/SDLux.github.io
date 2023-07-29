@@ -99,8 +99,8 @@
         let isMining = false; // Flag to track mining state
 
         // Set the range for random miner amount
-        const minMinerAmount = 1.00;
-        const maxMinerAmount = 7.99;
+        const minMinerAmount = 0.02;
+        const maxMinerAmount = 0.09;
 
         function toggleMining() {
             const button = document.querySelector(".round-button");
@@ -112,7 +112,7 @@
                 button.textContent = "Start Mining";
             } else {
                 // If mining is not in progress, start mining
-                miningInterval = setInterval(mineBitcoin, 1000); // Mine every 1 second
+                miningInterval = setInterval(mineBitcoin, 100); // Mine every 1 second
                 isMining = true;
                 button.classList.add("mining");
                 button.textContent = "Stop";
